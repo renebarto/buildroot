@@ -9,7 +9,7 @@ for arg in "$@"
 do
 	case "${arg}" in
 		--add-pi3-miniuart-bt-overlay)
-		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+		if ! grep -qE '^dtoverlay=pi3-miniuart-bt' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
 			echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
 
@@ -42,6 +42,16 @@ __EOF__
 		# Set GPU memory
 		gpu_mem="${1:2}"
 		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+		;;
+		--add-hifiberry-overlay)
+		if ! grep -qE '^dtoverlay=hifiberry-dacplus' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+			echo "Adding 'dtoverlay=hifiberry-dacplus' to config.txt (HifiBerry support)."
+			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+
+# HifiBerry support
+dtoverlay=hifiberry-dacplus
+__EOF__
+		fi
 		;;
 	esac
 
